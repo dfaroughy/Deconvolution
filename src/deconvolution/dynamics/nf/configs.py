@@ -5,13 +5,13 @@ from dataclasses import dataclass
 
 @dataclass
 class NormFlow_Configs:
-    DYNAMICS : str = 'NormFlow'
-    permutation : str = '1-cycle'
-    num_transforms: int = 5
+    DYNAMICS: str = 'NormFlow'
+    PERMUTATION: str = '1-cycle'
+    NUM_TRANSFORMS: int = 5
     
 @dataclass
 class Deconvolution_Configs:
-    DYNAMICS : str = 'DeconvolutionFlow'
-    permutation : str = '1-cycle'
-    num_transforms: int = 5
-    num_mc_draws: int = 30
+    DYNAMICS: str = 'DeconvolutionFlow'
+    PERMUTATION: str = '1-cycle'
+    NUM_TRANSFORMS: int = 5
+    NUM_NOISE_DRAWS: int = 30

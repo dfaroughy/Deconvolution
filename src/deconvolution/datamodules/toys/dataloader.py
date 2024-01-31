@@ -10,10 +10,10 @@ class ToysDataLoader:
     def __init__(self, datasets: Dataset, configs: dataclass): # type: ignore
 
         self.datasets = datasets        
-        self.fracs = configs.data_split_fracs
-        self.batch_size = configs.batch_size
-        self.num_workers = configs.num_workers
-        self.pin_memory = configs.pin_memory
+        self.fracs = configs.DATA_SPLIT_FRACS
+        self.batch_size = configs.BATCH_SIZE
+        self.num_workers = configs.NUM_WORKERS
+        self.pin_memory = configs.PIN_MEMORY
         self.dataloader()
 
     def train_val_test_split(self, shuffle=False):

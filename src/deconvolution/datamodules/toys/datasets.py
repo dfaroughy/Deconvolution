@@ -15,8 +15,8 @@ class SmearedGaussDataset(torch.utils.data.Dataset):
         
     def __init__(self, configs: dataclass):
         
-        self.num_points = configs.num_points
-        self.noise_cov = torch.Tensor(configs.noise_cov)
+        self.num_points = configs.NUM_POINTS
+        self.noise_cov = torch.Tensor(configs.NOISE_COV)
 
         self.get_truth_data()
         self.get_smeared_data()

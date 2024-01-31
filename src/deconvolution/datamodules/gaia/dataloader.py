@@ -12,8 +12,8 @@ class GaiaDataLoader:
                  ):
 
         self.datasets = datasets        
-        self.data_split_fracs = configs.data_split_fracs
-        self.batch_size = configs.batch_size
+        self.data_split_fracs = configs.DATA_SPLIT_FRACS
+        self.batch_size = configs.BATCH_SIZE
         self.dataloader()
 
     def train_val_test_split(self, dataset, train_frac, valid_frac, shuffle=False):

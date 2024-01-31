@@ -9,9 +9,9 @@ class GaiaDataset(Dataset):
 
     def __init__(self, configs: dataclass):
         
-        self.dataset = configs.dataset
-        self.cuts = configs.cuts
-        self.preprocess_methods = configs.preprocess 
+        self.dataset = configs.DATASET
+        self.cuts = configs.CUTS
+        self.preprocess_methods = configs.PREPROCESS 
         self.summary_stats = None
         
         ''' data attributes:

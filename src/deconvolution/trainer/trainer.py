@@ -33,12 +33,13 @@ class Trainer:
         self.dynamics = dynamics
         self.model = model
         self.dataloader = dataloader
-        self.workdir = Path(configs.workdir)
+        self.workdir = Path(configs.WORKDIR)
         self.epochs = configs.EPOCHS
-        self.early_stopping = configs.EPOCHS if configs.early_stopping is None else configs.early_stopping
-        self.min_epochs = 0 if configs.min_epochs is None else configs.min_epochs
-        self.print_epochs = 1 if configs.print_epochs is None else configs.print_epochs
-        self.fix_seed = configs.fix_seed
+        self.early_stopping = configs.EPOCHS if configs.EARLY_STOPPING is None else configs.EARLY_STOPPING
+        self.min_epochs = 0 if configs.MIN_EPOCHS is None else configs.MIN_EPOCHS
+        self.print_epochs = 1 if configs.PRINT_EPOCHS is None else configs.PRINT_EPOCHS 
+        self.fix_seed = configs.FIX_SEED
+        self.device = configs.DEVICE
 
         #...logger & tensorboard:
         os.makedirs(self.workdir/'tensorboard', exist_ok=True)
@@ -88,7 +89,7 @@ class Trainer:
             self.model.load_state_dict(torch.load(path/'last_epoch_model.pth'))
             self.last_epoch_model = deepcopy(self.model)
         elif model == 'best':
-            self.model.load_state_dict(torch.load(path/'best_epoch_model.pth', map_location=(torch.device('cpu') if self.configs.DEVICE=='cpu' else None)))
+            self.model.load_state_dict(torch.load(path/'best_epoch_model.pth', map_location=(torch.device('cpu') if self.device=='cpu' else None)))
             self.best_epoch_model = deepcopy(self.model)
         elif model == 'last':
             self.model.load_state_dict(torch.load(path/'last_epoch_model.pth'))

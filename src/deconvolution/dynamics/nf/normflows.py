@@ -4,9 +4,9 @@ from dataclasses import dataclass
 class NormalizingFlow:
 
     def __init__(self, configs: dataclass):
-        self.dim = configs.dim_input
+        self.dim = configs.DIM_INPUT
         self.device = configs.DEVICE
-        self.num_transforms = configs.num_transforms
+        self.num_transforms = configs.NUM_TRANSFORMS
 
     def loss(self, model, batch):
         ''' Negative Log-probability loss
@@ -18,25 +18,25 @@ class NormalizingFlow:
 class DeconvolutionFlow:
 
     def __init__(self, configs: dataclass):
-        self.dim = configs.dim_input
+        self.dim = configs.DIM_INPUT
         self.device = configs.DEVICE
-        self.num_transforms = configs.num_transforms
-        self.num_mc_draws = configs.num_mc_draws
+        self.num_transforms = configs.NUM_TRANSFORMS
+        self.num_noise_draws = configs.NUM_NOISE_DRAWS
         
     def loss(self, model, batch):
         """ deconvolution loss
         """
         cov = batch['covariance']
         smeared = batch['smeared'] 
-        cov = cov.repeat_interleave(self.num_mc_draws,0)            # ABC... -> AABBCC...
-        smeared = smeared.repeat_interleave(self.num_mc_draws,0)    # ABC... -> AABBCC...
+        cov = cov.repeat_interleave(self.num_noise_draws,0)            # ABC... -> AABBCC...
+        smeared = smeared.repeat_interleave(self.num_noise_draws,0)    # ABC... -> AABBCC...
         epsilon = torch.randn_like(smeared)
         epsilon = torch.reshape(epsilon,(-1, epsilon.dim(), 1)) 
         x = smeared + torch.squeeze(torch.bmm(cov, epsilon))        # x = smeared - cov * epsilon
         x = x.to(self.device)
-        logprob = torch.reshape(model.log_prob(x),(-1, self.num_mc_draws))
+        logprob = torch.reshape(model.log_prob(x),(-1, self.num_noise_draws))
         loss = - torch.mean(torch.logsumexp(logprob, dim=-1))
-        return loss + torch.log(torch.tensor(self.num_mc_draws))
+        return loss + torch.log(torch.tensor(self.num_noise_draws))
 
 
 

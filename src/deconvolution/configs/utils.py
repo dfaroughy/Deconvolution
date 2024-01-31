@@ -4,7 +4,11 @@ from typing import Type
 from dataclasses import dataclass, asdict, make_dataclass, field, fields, MISSING
 from deconvolution.utils.utils import make_dir, print_table
 
-def Configs(data: Type[dataclass], model: Type[dataclass], dynamics: Type[dataclass], pipeline: Type[dataclass]=None):  # type: ignore
+def Configs(experiment_description: str,
+            data: Type[dataclass],
+            model: Type[dataclass], 
+            dynamics: Type[dataclass], 
+            pipeline: Type[dataclass]=None):  # type: ignore
     
     combined_fields = []
     all_dataclasses = [data, model, dynamics] 
@@ -19,15 +23,16 @@ def Configs(data: Type[dataclass], model: Type[dataclass], dynamics: Type[datacl
     Combined = make_dataclass("Configs", combined_fields, bases=(object,))
 
     def set_workdir(self, path: str, dir_name: str=None, save_config: bool=True):  # type: ignore
+        print(f"Preparing experiment: {experiment_description} at workdir:")
         time = datetime.now().strftime("%Y.%m.%d_%Hh%M")
         dir_name = '{}.{}.{}.{}'.format(self.DATA, self.DYNAMICS, self.MODEL, time) if dir_name is None else dir_name
-        self.workdir = make_dir(path + '/' + dir_name, overwrite=True)
+        self.WORKDIR = make_dir(path + '/' + dir_name, overwrite=True)
         if save_config: self.save()
 
     def save(self, path: str=None): # type: ignore
         config = asdict(self)
         print_table(config)
-        path = self.workdir + '/config.json' if path is None else path
+        path = self.WORKDIR + '/config.json' if path is None else path
         with open(path, 'w') as f: 
             json.dump(config, f, indent=4)
 

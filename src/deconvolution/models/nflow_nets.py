@@ -20,14 +20,14 @@ class MAFPiecewiseRQS(nn.Module):
 	'''
 	def __init__(self, configs: dataclass):
 		super(MAFPiecewiseRQS, self).__init__()
-		self.dim = configs.dim_input
+		self.dim = configs.DIM_INPUT
 		self.device = configs.DEVICE
-		self.num_transforms = configs.num_transforms
+		self.num_transforms = configs.NUM_TRANSFORMS
 		self.flow_net  = _MAFPiecewiseRQS(configs)
-		self.get_permutation(configs.permutation)
+		self.get_permutation(configs.PERMUTATION)
 		self.transforms()
 		self.flows = CompositeTransform(self.transforms).to(configs.DEVICE)
-		self.base_distribution = StandardNormal(shape=[configs.dim_input]).to(configs.DEVICE)
+		self.base_distribution = StandardNormal(shape=[configs.DIM_INPUT]).to(configs.DEVICE)
 		self.net = Flow(self.flows, self.base_distribution)
 
 	def get_permutation(self, perm):
@@ -60,15 +60,15 @@ class _MAFPiecewiseRQS(nn.Module):
 		super(_MAFPiecewiseRQS, self).__init__() 
 		self.device = configs.DEVICE
 		self.maf = MaskedPiecewiseRationalQuadraticAutoregressiveTransform(
-						features=configs.dim_input,
-						hidden_features=configs.dim_hidden,
-						num_bins=configs.num_bins,
-						tails=configs.tails,
-						tail_bound=configs.tail_bound,
-						num_blocks=configs.num_blocks,
-						use_residual_blocks=configs.use_residual_blocks,
-						dropout_probability=configs.dropout,
-						use_batch_norm=configs.use_batch_norm)
+						features=configs.DIM_INPUT,
+						hidden_features=configs.DIM_HIDDEN,
+						num_bins=configs.NUM_BINS,
+						tails=configs.TAILS,
+						tail_bound=configs.TAIL_BOUND,
+						num_blocks=configs.NUM_BLOCKS,
+						use_residual_blocks=configs.USE_RESIDUAL_BLOCKS,
+						dropout_probability=configs.DROPOUT,
+						use_batch_norm=configs.USE_BATCH_NORM)
                 
 	def forward(self, x, context=None):
 		x = x.to(self.device)
@@ -86,14 +86,14 @@ class MAFAffine(nn.Module):
 	'''
 	def __init__(self, configs: dataclass):
 		super(MAFAffine, self).__init__()
-		self.dim = configs.dim_input
+		self.dim = configs.DIM_INPUT
 		self.device = configs.DEVICE
-		self.num_transforms = configs.num_transforms
+		self.num_transforms = configs.NUM_TRANSFORMS
 		self.flow_net = _MAFAffine(configs)
-		self.get_permutation(configs.permutation)
+		self.get_permutation(configs.PERMUTATION)
 		self.transforms()
 		self.flows = CompositeTransform(self.transforms).to(configs.DEVICE)
-		self.base_distribution = StandardNormal(shape=[configs.dim_input]).to(configs.DEVICE)
+		self.base_distribution = StandardNormal(shape=[configs.DIM_INPUT]).to(configs.DEVICE)
 		self.net = Flow(self.flows, self.base_distribution)
 
 	def get_permutation(self, perm):
@@ -123,12 +123,12 @@ class _MAFAffine(nn.Module):
 	def __init__(self, configs):
 		super(_MAFAffine, self).__init__() 
 		self.maf = MaskedAffineAutoregressiveTransform(
-						features=configs.dim_input,
-						hidden_features=configs.dim_hidden,
-						num_blocks=configs.num_blocks,
-						use_residual_blocks=configs.use_residual_blocks,
-						dropout_probability=configs.dropout,
-						use_batch_norm=configs.use_batch_norm)
+						features=configs.DIM_INPUT,
+						hidden_features=configs.DIM_HIDDEN,
+						num_blocks=configs.NUM_BLOCKS,
+						use_residual_blocks=configs.USE_RESIDUAL_BLOCKS,
+						dropout_probability=configs.DROPOUT,
+						use_batch_norm=configs.USE_BATCH_NORM)
                 
 	def forward(self, x, context=None):
 		return self.maf.forward(x, context)
@@ -145,14 +145,14 @@ class CouplingsPiecewiseRQS(nn.Module):
 	'''
 	def __init__(self, configs: dataclass):
 		super(CouplingsPiecewiseRQS, self).__init__()
-		self.dim = configs.dim_input
+		self.dim = configs.DIM_INPUT
 		self.device = configs.DEVICE
-		self.num_transforms = configs.num_transforms
+		self.num_transforms = configs.NUM_TRANSFORMS
 		self.flow_net  = _CouplingsPiecewiseRQS(configs)
-		self.get_permutation(configs.permutation)
+		self.get_permutation(configs.PERMUTATION)
 		self.transforms()
 		self.flows = CompositeTransform(self.transforms).to(configs.DEVICE)
-		self.base_distribution = StandardNormal(shape=[configs.dim_input]).to(configs.DEVICE)
+		self.base_distribution = StandardNormal(shape=[configs.DIM_INPUT]).to(configs.DEVICE)
 		self.net = Flow(self.flows, self.base_distribution)
 
 	def get_permutation(self, perm):
@@ -185,26 +185,26 @@ class _CouplingsPiecewiseRQS(nn.Module):
 	def __init__(self, configs):
 		super(_CouplingsPiecewiseRQS, self).__init__() 
 
-		mask = torch.ones(configs.dim_input)
-		if configs.mask == 'checkerboard': 
+		mask = torch.ones(configs.DIM_INPUT)
+		if configs.MASK == 'checkerboard': 
 			mask[::2]=-1
-		elif configs.mask == 'mid-split': 
-			mask[int(configs.dim_input/2):]=-1  # 2006.08545
+		elif configs.MASK == 'mid-split': 
+			mask[int(configs.DIM_INPUT/2):]=-1  # 2006.08545
 	
 		def resnet(in_features, out_features):
 			return ResidualNet(in_features,
 								out_features,
-								hidden_features=configs.dim_hidden,
-								num_blocks=configs.num_blocks,
-								dropout_probability=configs.dropout,
-								use_batch_norm=configs.use_batch_norm)
+								hidden_features=configs.DIM_HIDDEN,
+								num_blocks=configs.NUM_BLOCKS,
+								dropout_probability=configs.DROPOUT,
+								use_batch_norm=configs.USE_BATCH_NORM)
 
 		self.coupl = PiecewiseRationalQuadraticCouplingTransform(
 							mask=mask,
         					transform_net_create_fn=resnet,
-        					num_bins=configs.num_bins,
-        					tails=configs.tails,
-        					tail_bound=configs.tail_bound)
+        					num_bins=configs.NUM_BINS,
+        					tails=configs.TAILS,
+        					tail_bound=configs.TAIL_BOUND)
 
 	def forward(self, x, context=None):
 		return self.coupl.forward(x, context)

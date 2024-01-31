@@ -4,7 +4,7 @@ import numpy as np
 import logging
 from pathlib import Path
 from torch.utils.data import DataLoader
-from dataclasses import dataclass, fields
+from dataclasses import dataclass
 
 class Train_Step(nn.Module): 
 
@@ -77,29 +77,38 @@ class Optimizer:
     """
 
     def __init__(self, configs: dataclass):
+
         self.configs = configs
+        self.device = configs.DEVICE
+        self.optimizer = configs.OPTIMIZER
+        self.lr = configs.LR
+        self.weight_decay = configs.WEIGHT_DECAY
+        self.optimizer_betas = configs.OPTIMIZER_BETAS
+        self.optimizer_eps = configs.OPTIMIZER_EPS
+        self.optimizer_amsgrad = configs.OPTIMIZER_AMSGRAD
+        self.gradient_clip = configs.GRADIENT_CLIP
 
     def get_optimizer(self, parameters):
 
-        optim_args = {'lr': self.configs.lr, 'weight_decay': self.configs.weight_decay}
+        optim_args = {'lr': self.lr, 'weight_decay': self.weight_decay}
 
-        if self.configs.optimizer == 'Adam':
-            if hasattr(self.configs, 'betas'): optim_args['betas'] = self.configs.optimizer_betas
-            if hasattr(self.configs, 'eps'): optim_args['eps'] = self.configs.optimizer_eps
-            if hasattr(self.configs, 'amsgrad'): optim_args['amsgrad'] = self.configs.optimizer_amsgrad
+        if self.optimizer == 'Adam':
+            if hasattr(self.configs, 'betas'): optim_args['betas'] = self.optimizer_betas
+            if hasattr(self.configs, 'eps'): optim_args['eps'] = self.optimizer_eps
+            if hasattr(self.configs, 'amsgrad'): optim_args['amsgrad'] = self.optimizer_amsgrad
             return torch.optim.Adam(parameters, **optim_args)
         
-        elif self.configs.optimizer == 'AdamW':
-            if hasattr(self.configs, 'betas'): optim_args['betas'] = self.configs.optimizer_betas
-            if hasattr(self.configs, 'eps'): optim_args['eps'] = self.configs.optimizer_eps
-            if hasattr(self.configs, 'amsgrad'): optim_args['amsgrad'] = self.configs.optimizer_amsgrad
+        elif self.optimizer == 'AdamW':
+            if hasattr(self.configs, 'betas'): optim_args['betas'] = self.optimizer_betas
+            if hasattr(self.configs, 'eps'): optim_args['eps'] = self.optimizer_eps
+            if hasattr(self.configs, 'amsgrad'): optim_args['amsgrad'] = self.optimizer_amsgrad
             return torch.optim.AdamW(parameters, **optim_args)
         
         else:
-            raise ValueError(f"Unsupported optimizer: {self.configs.optimizer}")
+            raise ValueError(f"Unsupported optimizer: {self.optimizer}")
         
     def clip_gradients(self, optimizer):
-        if self.configs.gradient_clip: torch.nn.utils.clip_grad_norm_(optimizer.param_groups[0]['params'], self.configs.gradient_clip)
+        if self.gradient_clip: torch.nn.utils.clip_grad_norm_(optimizer.param_groups[0]['params'], self.gradient_clip)
 
     def __call__(self, parameters):
         optimizer = self.get_optimizer(parameters)
@@ -122,14 +131,18 @@ class Scheduler:
     """
 
     def __init__(self, configs: dataclass):
-        self.configs = configs
+        self.scheduler = configs.SCHEDULER
+        self.scheduler_T_max = configs.SCHEDULER_T_MAX
+        self.scheduler_eta_min = configs.SCHEDULER_ETA_MIN
+        self.scheduler_gamma = configs.SCHEDULER_GAMMA
+        self.scheduler_step_size = configs.SCHEDULER_STEP_SIZE
 
     def get_scheduler(self, optimizer):
-        if self.configs.scheduler == 'CosineAnnealingLR': return torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=self.configs.scheduler_T_max, eta_min=self.configs.scheduler_eta_min)
-        elif self.configs.scheduler == 'StepLR': return torch.optim.lr_scheduler.StepLR(optimizer, step_size=self.configs.scheduler_step_size, gamma=self.configs.scheduler_gamma)
-        elif self.configs.scheduler == 'ExponentialLR': return torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=self.configs.scheduler_gamma)
-        elif self.configs.scheduler is None: return NoScheduler(optimizer)
-        else: raise ValueError(f"Unsupported scheduler: {self.configs.scheduler}")
+        if self.scheduler == 'CosineAnnealingLR': return torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=self.scheduler_T_max, eta_min=self.scheduler_eta_min)
+        elif self.scheduler == 'StepLR': return torch.optim.lr_scheduler.StepLR(optimizer, step_size=self.scheduler_step_size, gamma=self.scheduler_gamma)
+        elif self.scheduler == 'ExponentialLR': return torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=self.scheduler_gamma)
+        elif self.scheduler is None: return NoScheduler(optimizer)
+        else: raise ValueError(f"Unsupported scheduler: {self.scheduler}")
 
     def __call__(self, optimizer):
         return self.get_scheduler(optimizer)

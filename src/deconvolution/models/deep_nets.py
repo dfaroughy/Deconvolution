@@ -7,8 +7,6 @@ from deconvolution.models.utils import get_activation_function, transformer_time
 
 #...Multi-Layer Perceptron architecture:
 
-
-
 class MLP(nn.Module):
 
     def __init__(self, configs):
@@ -19,12 +17,12 @@ class MLP(nn.Module):
         self.to(self.device)
 
     def define_deep_models(self, configs):
-        self.dim_input = configs.dim_input
-        self.dim_output = configs.dim_input
-        self.dim_hidden = configs.dim_hidden 
-        self.dim_time_emb = configs.dim_time_emb if configs.dim_time_emb is not None else 1
-        self.num_layers = configs.num_layers
-        self.act_fn = get_activation_function(configs.activation)
+        self.dim_input = configs.DIM_INPUT
+        self.dim_output = configs.DIM_INPUT
+        self.dim_hidden = configs.DIM_HIDDEN 
+        self.dim_time_emb = configs.DIM_TIME_EMB if configs.DIM_TIME_EMB is not None else 1
+        self.num_layers = configs.NUM_LAYERS
+        self.act_fn = get_activation_function(configs.ACTIVATION)
 
         layers = [nn.Linear(self.dim_input + self.dim_time_emb, self.dim_hidden)]
 
@@ -34,17 +32,11 @@ class MLP(nn.Module):
         self.output_layer = nn.Linear(self.dim_hidden, self.dim_output)
 
     def forward(self, t, x, context=None, mask=None):
-        # print('x=', x.shape)
-        # print('t=', t.shape)
 
         x = x.to(self.device)
         time_embeddings = transformer_timestep_embedding(t.squeeze(1), embedding_dim=self.dim_time_emb) if t is not None else t
         time_embeddings = time_embeddings.to(self.device)
-        # print('temb=', time_embeddings.shape)
-
         x = torch.concat([x, time_embeddings], dim=1)
-
-        # print('xcat=' ,x.shape)
         
         for layer in self.layers:
             x = layer(x)
@@ -56,38 +48,6 @@ class MLP(nn.Module):
         for layer in self.layers + [self.output_layer]:
             if isinstance(layer, nn.Linear):
                 nn.init.xavier_uniform_(layer.weight)
-
-
-class ClassifierNet(nn.Module):
-
-    def __init__(self, 
-                 configs):
-        
-        super().__init__()
-        self.device = configs.DEVICE
-        self.define_deep_models(configs)
-        # self.init_weights()
-        self.to(self.device)
-
-    def define_deep_models(self, configs):
-        self.dim_input = configs.dim_input
-        self.dim_hidden = configs.dim_hidden 
-        self.num_layers = configs.num_layers
-        self.act_fn = get_activation_function(configs.activation)
-        # layers:
-
-        layers = []
-        for _ in range(self.num_layers):
-            layers.append(nn.Linear(self.dim_input, self.dim_hidden))
-            layers.append(self.act_fn)
-            self.dim_input = self.dim_hidden
-
-        layers.append(nn.Linear(self.dim_hidden, 1))
-        layers.append(nn.Sigmoid())
-        self.model = nn.Sequential(*layers)
-
-    def forward(self, x):
-        return self.model(x)
     
 #...ResNet architecture:
 
@@ -129,12 +89,12 @@ class ResNet(nn.Module):
     def __init__(self, configs):
         super(ResNet, self).__init__()
         self.device = configs.DEVICE
-        self.resnet = _ResNet(dim=configs.dim_input, 
-                            out_dim=None,
-                            w=configs.dim_hidden, 
-                            num_blocks=configs.num_blocks,
-                            num_layers_per_block=configs.num_block_layers,
-                            time_varying=True)
+        self.resnet = _ResNet(dim=configs.DIM_INPUT, 
+                              out_dim=None,
+                              w=configs.DIM_HIDDEN, 
+                              num_blocks=configs.NUM_BLOCKS,
+                              num_layers_per_block=configs.NUM_BLOCK_LAYERS,
+                              time_varying=True)
                 
     def forward(self, t, x, context=None, mask=None, sampling=False):
         x = torch.cat([x, t], dim=-1)
