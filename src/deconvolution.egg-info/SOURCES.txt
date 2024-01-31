@@ -1,0 +1,5 @@
+setup.py
+src/deconvolution.egg-info/PKG-INFO
+src/deconvolution.egg-info/SOURCES.txt
+src/deconvolution.egg-info/dependency_links.txt
+src/deconvolution.egg-info/top_level.txt

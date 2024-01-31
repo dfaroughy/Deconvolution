@@ -10,8 +10,8 @@ class NormFlow_Configs:
     num_transforms: int = 5
     
 @dataclass
-class Deconvolution_NormFlow_Configs:
-    DYNAMICS : str = 'DeconvolutionNormFlow'
+class Deconvolution_Configs:
+    DYNAMICS : str = 'DeconvolutionFlow'
     permutation : str = '1-cycle'
     num_transforms: int = 5
     num_mc_draws: int = 30

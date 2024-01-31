@@ -1,4 +1,6 @@
 pytorch
 torchdyn
+torchcfm
 tensorboard
-jetnet
+
+

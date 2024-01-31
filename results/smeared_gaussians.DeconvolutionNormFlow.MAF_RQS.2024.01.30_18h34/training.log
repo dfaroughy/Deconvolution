@@ -1,0 +1,47 @@
+2024-01-30 18:34:29,896 - INFO - Training configurations:
+2024-01-30 18:34:29,896 - INFO - DATA: smeared_gaussians
+2024-01-30 18:34:29,896 - INFO - features: ['x', 'y']
+2024-01-30 18:34:29,896 - INFO - num_points: 37500
+2024-01-30 18:34:29,896 - INFO - dim_input: 2
+2024-01-30 18:34:29,896 - INFO - noise_cov: [[0.1, 0], [0, 1]]
+2024-01-30 18:34:29,896 - INFO - preprocess: []
+2024-01-30 18:34:29,896 - INFO - cuts: {'x': [-inf, inf], 'y': [-inf, inf]}
+2024-01-30 18:34:29,896 - INFO - DEVICE: cpu
+2024-01-30 18:34:29,896 - INFO - optimizer: Adam
+2024-01-30 18:34:29,896 - INFO - lr: 0.0001
+2024-01-30 18:34:29,896 - INFO - weight_decay: 1e-05
+2024-01-30 18:34:29,896 - INFO - optimizer_betas: [0.9, 0.999]
+2024-01-30 18:34:29,896 - INFO - optimizer_eps: 1e-08
+2024-01-30 18:34:29,896 - INFO - optimizer_amsgrad: False
+2024-01-30 18:34:29,896 - INFO - gradient_clip: None
+2024-01-30 18:34:29,896 - INFO - scheduler: None
+2024-01-30 18:34:29,896 - INFO - scheduler_T_max: None
+2024-01-30 18:34:29,896 - INFO - scheduler_eta_min: None
+2024-01-30 18:34:29,896 - INFO - scheduler_gamma: None
+2024-01-30 18:34:29,896 - INFO - scheduler_step_size: None
+2024-01-30 18:34:29,896 - INFO - EPOCHS: 100
+2024-01-30 18:34:29,897 - INFO - batch_size: 512
+2024-01-30 18:34:29,897 - INFO - data_split_fracs: [0.8, 0.2, 0.0]
+2024-01-30 18:34:29,897 - INFO - num_workers: 8
+2024-01-30 18:34:29,897 - INFO - pin_memory: True
+2024-01-30 18:34:29,897 - INFO - early_stopping: None
+2024-01-30 18:34:29,897 - INFO - min_epochs: None
+2024-01-30 18:34:29,897 - INFO - print_epochs: 2
+2024-01-30 18:34:29,897 - INFO - fix_seed: None
+2024-01-30 18:34:29,897 - INFO - MODEL: MAF_RQS
+2024-01-30 18:34:29,897 - INFO - dim_hidden: 16
+2024-01-30 18:34:29,897 - INFO - num_blocks: 2
+2024-01-30 18:34:29,897 - INFO - use_residual_blocks: False
+2024-01-30 18:34:29,897 - INFO - dropout: 0.0
+2024-01-30 18:34:29,897 - INFO - use_batch_norm: False
+2024-01-30 18:34:29,897 - INFO - num_bins: 10
+2024-01-30 18:34:29,897 - INFO - tails: linear
+2024-01-30 18:34:29,897 - INFO - tail_bound: 10
+2024-01-30 18:34:29,897 - INFO - DYNAMICS: DeconvolutionNormFlow
+2024-01-30 18:34:29,897 - INFO - permutation: 1-cycle
+2024-01-30 18:34:29,897 - INFO - num_transforms: 5
+2024-01-30 18:34:29,897 - INFO - num_mc_draws: 50
+2024-01-30 18:34:29,897 - INFO - SAMPLER: nflows
+2024-01-30 18:34:29,897 - INFO - num_gen_samples: 1000
+2024-01-30 18:34:29,897 - INFO - number of training parameters: 9468
+2024-01-30 18:34:29,897 - INFO - start training...

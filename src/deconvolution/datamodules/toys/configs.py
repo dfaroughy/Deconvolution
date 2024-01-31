@@ -7,16 +7,7 @@ from typing import List, Dict, Tuple
 """
 
 @dataclass
-class Deconvolution_Gauss1D_Configs:
-    DATA : str = 'Gauss1D'
-    features : List[str] = field(default_factory = lambda : ['x'])
-    num_points : int = 10000
-    dim_input : int = 1
-    log_norm_scale : float = 1.0
-    preprocess : List[str] = field(default_factory = lambda : [])
-
-@dataclass
-class Deconvolution_Gauss2D_Configs:
+class Deconvolution_Gauss_Configs:
     DATA: str = 'Gauss2D'
     features : List[str] = field(default_factory = lambda : ['x', 'y'])
     num_points : int = 10000

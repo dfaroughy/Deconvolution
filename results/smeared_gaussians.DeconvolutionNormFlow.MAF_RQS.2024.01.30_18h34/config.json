@@ -1,0 +1,74 @@
+{
+    "DATA": "smeared_gaussians",
+    "features": [
+        "x",
+        "y"
+    ],
+    "num_points": 37500,
+    "dim_input": 2,
+    "noise_cov": [
+        [
+            0.1,
+            0
+        ],
+        [
+            0,
+            1
+        ]
+    ],
+    "preprocess": [],
+    "cuts": {
+        "x": [
+            -Infinity,
+            Infinity
+        ],
+        "y": [
+            -Infinity,
+            Infinity
+        ]
+    },
+    "DEVICE": "cpu",
+    "optimizer": "Adam",
+    "lr": 0.0001,
+    "weight_decay": 1e-05,
+    "optimizer_betas": [
+        0.9,
+        0.999
+    ],
+    "optimizer_eps": 1e-08,
+    "optimizer_amsgrad": false,
+    "gradient_clip": null,
+    "scheduler": null,
+    "scheduler_T_max": null,
+    "scheduler_eta_min": null,
+    "scheduler_gamma": null,
+    "scheduler_step_size": null,
+    "EPOCHS": 100,
+    "batch_size": 512,
+    "data_split_fracs": [
+        0.8,
+        0.2,
+        0.0
+    ],
+    "num_workers": 8,
+    "pin_memory": true,
+    "early_stopping": null,
+    "min_epochs": null,
+    "print_epochs": 2,
+    "fix_seed": null,
+    "MODEL": "MAF_RQS",
+    "dim_hidden": 16,
+    "num_blocks": 2,
+    "use_residual_blocks": false,
+    "dropout": 0.0,
+    "use_batch_norm": false,
+    "num_bins": 10,
+    "tails": "linear",
+    "tail_bound": 10,
+    "DYNAMICS": "DeconvolutionNormFlow",
+    "permutation": "1-cycle",
+    "num_transforms": 5,
+    "num_mc_draws": 50,
+    "SAMPLER": "nflows",
+    "num_gen_samples": 1000
+}

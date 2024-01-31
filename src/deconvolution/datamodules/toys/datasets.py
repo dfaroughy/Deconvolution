@@ -25,6 +25,7 @@ class SmearedGaussDataset(torch.utils.data.Dataset):
     def __getitem__(self, idx):
         output = {}
         output['smeared'] = self.smeared[idx]
+        output['target'] = self.smeared[idx]
         output['covariance'] = self.covs[idx]
         output['mask'] = torch.ones_like(self.smeared[idx][..., 0])
         output['context'] = torch.empty_like(self.smeared[idx][..., 0])
