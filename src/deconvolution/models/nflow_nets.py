@@ -62,7 +62,7 @@ class _MAFPiecewiseRQS(nn.Module):
 		self.maf = MaskedPiecewiseRationalQuadraticAutoregressiveTransform(
 						features=configs.DIM_INPUT,
 						hidden_features=configs.DIM_HIDDEN,
-						num_bins=configs.NUM_BINS,
+						num_bins=configs.NUM_RQS_BINS,
 						tails=configs.TAILS,
 						tail_bound=configs.TAIL_BOUND,
 						num_blocks=configs.NUM_BLOCKS,
@@ -186,9 +186,9 @@ class _CouplingsPiecewiseRQS(nn.Module):
 		super(_CouplingsPiecewiseRQS, self).__init__() 
 
 		mask = torch.ones(configs.DIM_INPUT)
-		if configs.MASK == 'checkerboard': 
+		if configs.COUPLING_MASK == 'checkerboard': 
 			mask[::2]=-1
-		elif configs.MASK == 'mid-split': 
+		elif configs.COUPLING_MASK == 'mid-split': 
 			mask[int(configs.DIM_INPUT/2):]=-1  # 2006.08545
 	
 		def resnet(in_features, out_features):
@@ -202,7 +202,7 @@ class _CouplingsPiecewiseRQS(nn.Module):
 		self.coupl = PiecewiseRationalQuadraticCouplingTransform(
 							mask=mask,
         					transform_net_create_fn=resnet,
-        					num_bins=configs.NUM_BINS,
+        					num_bins=configs.NUM_RQS_BINS,
         					tails=configs.TAILS,
         					tail_bound=configs.TAIL_BOUND)
 

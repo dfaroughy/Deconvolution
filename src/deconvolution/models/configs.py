@@ -17,7 +17,7 @@ class MLP_Configs(Training_Configs):
 @dataclass
 class MAF_Affine_Configs(Training_Configs):
     MODEL : str = 'MAF_Affine'
-    DIM_HIDDEN : int = 128 
+    DIM_HIDDEN : int = 64
     NUM_BLOCKS: int = 2 
     USE_RESIDUAL_BLOCKS: bool = False
     DROPOUT : float = 0.0
@@ -26,8 +26,8 @@ class MAF_Affine_Configs(Training_Configs):
 @dataclass
 class Couplings_Affine_Configs(Training_Configs):
     MODEL : str = 'Couplings_Affine'
-    MASK : str = 'checkerboard'
-    DIM_HIDDEN : int = 128 
+    COUPLING_MASK : str = 'checkerboard'
+    DIM_HIDDEN : int = 64 
     NUM_BLOCKS: int = 2 
     USE_RESIDUAL_BLOCKS: bool = False
     DROPOUT : float = 0.0
@@ -36,24 +36,24 @@ class Couplings_Affine_Configs(Training_Configs):
 @dataclass
 class MAF_RQS_Configs(Training_Configs):
     MODEL : str = 'MAF_RQS'
-    DIM_HIDDEN : int = 128 
+    DIM_HIDDEN : int = 64 
     NUM_BLOCKS: int = 2 
     USE_RESIDUAL_BLOCKS: bool= False
     DROPOUT : float = 0.0
     USE_BATCH_NORM : bool = False
-    NUM_BINS : int = 10
+    NUM_RQS_BINS : int = 10
     TAILS : str = 'linear'
     TAIL_BOUND : int = 5
 
 @dataclass
 class Couplings_RQS_Configs(Training_Configs):
     MODEL : str = 'Couplings_RQS'
-    MASK : str = 'checkerboard'
-    DIM_HIDDEN : int = 128 
+    COUPLING_MASK : str = 'checkerboard'
+    DIM_HIDDEN : int = 64 
     NUM_BLOCKS: int = 2 
     USE_RESIDUAL_BLOCKS: bool= False
     DROPOUT : float = 0.0
     USE_BATCH_NORM : bool = False
-    NUM_BINS : int = 10
+    NUM_RQS_BINS : int = 10
     TAILS : str = 'linear'
     TAIL_BOUND : int = 5

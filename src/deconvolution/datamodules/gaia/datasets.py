@@ -29,9 +29,11 @@ class GaiaDataset(Dataset):
         output = {}
         output['target'] = self.target_preprocess[idx]
         output['source'] = self.source[idx]
+
+        output['smeared'] = self.smeared[idx]
+        output['covariance'] = self.covariance[idx]
         output['mask'] = torch.ones_like(self.target_preprocess[idx][..., 0])
         output['context'] = torch.empty_like(self.target_preprocess[idx][..., 0])
-        output['covariance'] = self.covariance[idx]
         return output
 
     def __len__(self):
@@ -42,6 +44,15 @@ class GaiaDataset(Dataset):
             yield self[i]
 
     def get_target_data(self):
+        target = torch.tensor(np.load(self.dataset[0]), dtype=torch.float32)        
+        target = PreProcessGaiaData(target, cuts=self.cuts, methods=self.preprocess_methods)
+        target.apply_cuts()
+        self.target = target.features.clone()
+        target.preprocess()
+        self.summary_stats = target.summary_stats
+        self.target_preprocess = target.features.clone()
+
+    def get_smeared_data(self):
         target = torch.tensor(np.load(self.dataset[0]), dtype=torch.float32)        
         target = PreProcessGaiaData(target, cuts=self.cuts, methods=self.preprocess_methods)
         target.apply_cuts()
