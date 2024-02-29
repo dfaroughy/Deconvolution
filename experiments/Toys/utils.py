@@ -8,6 +8,10 @@ def plot_gaussians(data, num_points=None, title=None, xlim=(-5,5), ylim=(-5,5), 
     y = data[:num_points,1]
     z = stats.gaussian_kde(np.vstack([x,y]))(np.vstack([x,y]))
     plt.scatter(x, y, c=z, s=0.2, cmap='jet')
+    plt.axhline(2, color='black', linewidth=0.5, linestyle='--')
+    plt.axhline(-2, color='black', linewidth=0.5, linestyle='--')
+    plt.axvline(0, color='black', linewidth=0.5, linestyle='--')
+    plt.axvline(-2, color='black', linewidth=0.5, linestyle='--')
     plt.xlim(*xlim)
     plt.ylim(*ylim)
     plt.title(title, fontsize=6)
