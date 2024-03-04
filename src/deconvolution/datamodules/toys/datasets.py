@@ -29,7 +29,7 @@ class SmearedGaussDataset(Dataset):
 
     def __getitem__(self, idx):
         output = {}
-        output['target'] = self.target_preprocess[idx] if self.preprocess_methods is not None else self.target[idx]
+        output['target'] = self.target[idx] # self.target_preprocess[idx] if self.preprocess_methods is not None else self.target[idx]
         output['covariance'] = self.covs[idx]
         output['mask'] = torch.ones_like(self.target[idx][..., 0])
         output['context'] = torch.empty_like(self.target[idx][..., 0])
@@ -56,11 +56,7 @@ class SmearedGaussDataset(Dataset):
             self.target = smeared
 
     def get_cov_data(self):
-        if self.preprocess_methods is not None:
-            covs = self.noise_cov * self.summary_stats['std']
-            self.covs = covs.unsqueeze(0).repeat(self.num_points, 1, 1)
-        else:
-            self.covs = self.noise_cov.unsqueeze(0).repeat(self.num_points, 1, 1)
+        self.covs = self.noise_cov.unsqueeze(0).repeat(self.num_points, 1, 1)
 
     def get_truth_data(self):
             data_means = torch.Tensor([

@@ -37,6 +37,7 @@ class PreProcessGaussData:
         """ center data to have zero mean
         """
         self.summary_stats['mean'] = torch.mean(self.features, dim=0)
+        self.summary_stats['std'] = torch.ones_like(self.summary_stats['mean'])
         self.features = self.features - self.summary_stats['mean']
 
     def standardize(self,  sigma: float=1.0):
@@ -46,12 +47,6 @@ class PreProcessGaussData:
         self.summary_stats['std'] = torch.std(self.features, dim=0)
         self.features = (self.features - self.summary_stats['mean']) * (sigma / self.summary_stats['std'])
 
-    def compute_summary_stats(self):
-        self.summary_stats['mean'] = torch.mean(self.features, dim=0)
-        self.summary_stats['std'] = torch.std(self.features, dim=0)
-        self.summary_stats['min'], _ = torch.min(self.features, dim=0)
-        self.summary_stats['max'], _ = torch.max(self.features, dim=0)
-        return self.summary_stats
 
 class PostProcessGaussData:
 
